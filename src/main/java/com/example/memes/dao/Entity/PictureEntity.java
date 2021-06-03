@@ -14,7 +14,11 @@ public class PictureEntity {
     @Column
     private String pname;
 
+    @Column
+    private int download = 0;
+
     @Column(columnDefinition="mediumblob", nullable=true)
     private byte[] pdetails;
+
 
 }

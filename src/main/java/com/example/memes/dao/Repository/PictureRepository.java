@@ -14,7 +14,7 @@ public interface PictureRepository extends JpaRepository<PictureEntity,Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "insert into picture (pname,pdetails) values (?1,?2)",nativeQuery = true)
+    @Query(value = "insert into picture (pname,pdetails,download) values (?1,?2,0)",nativeQuery = true)
     int addPicture(String pname,byte[] pdetails);
 
     @Transactional
@@ -28,6 +28,11 @@ public interface PictureRepository extends JpaRepository<PictureEntity,Long> {
    @Query(value = "select count (*) from picture",nativeQuery = true)
     int countNum();
 
+    @Transactional
+    @Modifying
+    @Query(value = " update picture p set p.download = p.download + 1 where p.pid =?1",nativeQuery = true)
+    int updateDownload(Long pid);
 
-
+    @Query(value = "select * from picture order by download desc",nativeQuery = true)
+    List<PictureEntity> queryPicByDownload();
 }

@@ -2,6 +2,7 @@ package com.example.memes.controller;
 
 import com.example.memes.dao.Entity.PictureEntity;
 import com.example.memes.dao.Entity.RelationEntity;
+import com.example.memes.service.CollectService;
 import com.example.memes.service.PictureService;
 import com.example.memes.service.RelationService;
 import lombok.SneakyThrows;
@@ -27,6 +28,8 @@ public class PictureController {
     private PictureService pictureService;
     @Autowired
     private RelationService relationService;
+    @Autowired
+    private CollectService collectService;
     private static final String path = "c:/Users/87212/Desktop/memes/test/";
     private static final ExecutorService CACHED_THREAD_POOL = Executors.newCachedThreadPool();
 
@@ -213,7 +216,6 @@ public class PictureController {
     public List<PictureEntity> findPicByCid(@RequestParam String cid){
         List<PictureEntity> pictureEntityList = new ArrayList<>();
         List<RelationEntity> relationEntityList ;
-        System.out.println(cid+"************************************************************");
         relationEntityList = relationService.findAllRelationsByCid(Long.valueOf(cid));
         for(RelationEntity relationEntity : relationEntityList){
             pictureEntityList.add(pictureService.findPictureByPid(relationEntity.getPid()));
@@ -221,5 +223,28 @@ public class PictureController {
         return pictureEntityList;
     }
 
+    @ResponseBody
+    @PostMapping(value = "/download")
+    public int updateDownload(@RequestParam String pid){
+        System.out.println("running");
+        return pictureService.updateDownload(Long.valueOf(pid));
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/querydownload")
+    public List<PictureEntity> queryPicByDownload(){
+        return pictureService.queryPicByDownload();
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/findPicByUid")
+    public List<PictureEntity> findPicByUid(@RequestParam Long uid){
+        List<Long> pidList = collectService.findPicByUid(uid);
+        List<PictureEntity> pictureEntityList = new ArrayList<>();
+        for(Long pid : pidList){
+            pictureEntityList.add(pictureService.findPictureByPid(pid));
+        }
+        return pictureEntityList;
+    }
 
 }

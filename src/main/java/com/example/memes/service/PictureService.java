@@ -32,5 +32,11 @@ public class PictureService {
         return pictureRepository.addPicture(pictureEntity.getPname(),pictureEntity.getPdetails());
     }
 
+    public int updateDownload(Long pid){
+        return pictureRepository.updateDownload(pid);
+    }
 
+    public List<PictureEntity> queryPicByDownload(){
+        return pictureRepository.queryPicByDownload();
+    }
 }
